@@ -437,6 +437,9 @@ open class HTTP: Operation {
         if let handler = DelegateManager.sharedInstance.requestHandler {
             handler(req)
         }
+        if let cachePolicy = DelegateManager.sharedInstance.cachePolicy {
+            req.cachePolicy = cachePolicy
+        }
         req.verb = method
         if let params = parameters {
             try requestSerializer.serialize(req, parameters: params)
@@ -468,6 +471,13 @@ open class HTTP: Operation {
     */
     open class func globalRequest(_ handler: ((NSMutableURLRequest) -> Void)?) {
         DelegateManager.sharedInstance.requestHandler = handler
+    }
+
+    /**
+    Set the global cache policy config
+    */
+    open class func globalCachePolicy(_ cachePolicy: URLRequest.CachePolicy?) {
+        DelegateManager.sharedInstance.cachePolicy = cachePolicy
     }
 }
 
@@ -506,6 +516,9 @@ public class DelegateManager: NSObject, URLSessionDataDelegate, URLSessionDownlo
     
     /// this is for global request handling
     var requestHandler:((NSMutableURLRequest) -> Void)?
+
+    // This is for global cache policy config
+    var cachePolicy: URLRequest.CachePolicy?
     
     var taskMap = Dictionary<Int,Response>()
     //"install" a task by adding the task to the map and setting the completion handler
