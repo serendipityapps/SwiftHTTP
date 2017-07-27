@@ -18,7 +18,7 @@ extension String {
     var escaped: String? {
         var set = CharacterSet()
         set.formUnion(CharacterSet.urlQueryAllowed)
-        set.remove(charactersIn: "[].:/?&=;+!@#$()',*\"") // remove the HTTP ones from the set.
+        set.remove(charactersIn: "[]:/?&=;+!@#$()',*\"") // remove the HTTP ones from the set.
         return self.addingPercentEncoding(withAllowedCharacters: set)
     }
     
